@@ -1,0 +1,10 @@
+.hidden {
+    display: none;
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 24px;
+    margin-bottom: 16px;
+    max-width: 500px;
+}

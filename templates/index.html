@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiszki</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main>
+    <h1>Fiszki</h1>
+
+    <section class="card">
+        <p id="category"></p>
+        <h2 id="question"></h2>
+        <p id="answer" class="hidden"></p>
+    </section>
+
+    <button id="show-answer">Pokaż odpowiedź</button>
+    <button id="next-card">Następna</button>
+    <button id="known">Umiem</button>
+    <button id="unknown">Nie umiem</button>
+</main>
+
+<script>
+    const flashcards = {{ flashcards | tojson }};
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
