@@ -21,6 +21,18 @@ function showCard(){
     answerElement.classList.add("hidden");
 }
 
+function updateStatus(cardId, status) {
+    fetch(`/flashcards/${cardId}/status`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            status: status
+        })
+    });
+}
+
 showAnswerButton.addEventListener("click", function (){
     answerElement.classList.toggle("hidden");
 })
@@ -34,11 +46,15 @@ nextCardButton.addEventListener("click", function (){
 });
 
 knownButton.addEventListener("click", function (){
-    knownCards.push(flashcards[currentIndex]);
+    const card = flashcards[currentIndex];
+    card.status = "known";
+    updateStatus(card.id, "known");
 });
 
 unknownButton.addEventListener("click", function () {
-    unknownCards.push(flashcards[currentIndex]);
+    const card = flashcards[currentIndex];
+    card.status = "unknown";
+    updateStatus(card.id, "unknown");
 });
 
 showCard();

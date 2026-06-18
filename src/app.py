@@ -1,29 +1,20 @@
-from flask import Flask, render_template
-import sqlite3
+from pathlib import Path
 
-app = Flask(__name__)
+from flask import Flask
 
-flashcards = [
-    {
-        "question": "Co robi querySelector?",
-        "answer": "Wybiera pierwszy element HTML pasujący do selektora CSS.",
-        "category": "JavaScript DOM"
-    },
-    {
-        "question": "Do czego służy Flask?",
-        "answer": "Do tworzenia backendu i obsługi tras w Pythonie.",
-        "category": "Backend"
-    },
-    {
-        "question": "Co to jest SQLite?",
-        "answer": "Lekka baza danych zapisywana w pliku.",
-        "category": "Baza danych"
-    }
-]
+from api import main_api
+from db import init_app, init_db
 
-@app.route('/')
-def index():
-    return render_template('index.html', flashcards=flashcards)
+BASE_DIR = Path(__file__).resolve().parent.parent
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
+app.config["DATABASE_PATH"] = BASE_DIR / "flashcards.sqlite"
+
+init_app(app)
+
+app.register_blueprint(main_api)
 
 if __name__ == '__main__':
+    with app.app_context():
+        init_db()
+
     app.run(debug=True)

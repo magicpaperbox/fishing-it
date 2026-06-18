@@ -1,7 +1,14 @@
+CREATE TABLE IF NOT EXISTS decks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS flashcards (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    deck_id INTEGER NOT NULL,
     category TEXT NOT NULL,
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'new'
+    status TEXT NOT NULL DEFAULT 'new',
+    FOREIGN KEY (deck_id) REFERENCES decks (id) ON DELETE CASCADE
 );
