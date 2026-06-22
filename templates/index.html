@@ -12,7 +12,7 @@
 <ul>
     {% for deck in decks %}
         <li>
-            <a href="{{ url_for('main.show_deck', deck_id=deck.id) }}">
+            <a href="/decks/{{ deck.id }}">
                 {{ deck.name }}
             </a>
         </li>

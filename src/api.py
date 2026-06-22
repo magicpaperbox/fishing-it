@@ -18,7 +18,6 @@ def index():
 @main_api.route('/decks/<int:deck_id>')
 def show_deck(deck_id):
     db = get_db()
-
     rows = db.execute("""
     SELECT id, deck_id, category, question, answer, status
     FROM flashcards
@@ -60,11 +59,11 @@ def import_flashcards():
     return {
         "message": f"Dodano {len(flashcards)} fiszek.",
         "deck_id": deck_id,
-        "count": len(data["flashcards"])
+        "count": len(flashcards)
     }, 201
 
 @main_api.route('/decks/<int:deck_id>/flashcards', methods=['POST'])
-def import_flashcard(deck_id):
+def add_flashcard(deck_id):
     flashcard = request.get_json()
     db = get_db()
     cursor = db.execute("""
