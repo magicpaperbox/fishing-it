@@ -1,10 +1,229 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #5f2644;
+    background:
+        radial-gradient(circle at top left, #ffe4f1 0, transparent 34%),
+        linear-gradient(135deg, #fff3f8 0%, #ffd6e8 48%, #ffc2dc 100%);
+}
+
+main {
+    width: min(92vw, 760px);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 42px 18px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+}
+
+h1 {
+    margin: 0 0 28px;
+    color: #b51668;
+    font-size: 42px;
+    font-weight: 800;
+}
+
+.logo {
+    align-self: flex-start;
+    margin-left: calc((100% - 100vw) / 2 + 24px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: min(100%, 360px);
+    padding: 0;
+    color: #b51668;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 48px;
+    font-weight: 800;
+    text-shadow: 0 3px 0 #ffd2e5;
+    text-decoration: none;
+}
+
+.logo::before {
+    content: "🎣";
+    width: 44px;
+    height: 44px;
+    padding-bottom: 3px;
+    margin-right: 12px;
+    border-radius: 50%;
+    color: #ffffff;
+    background: #ec4f9a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    line-height: 1;
+    box-shadow: inset 0 -4px 0 rgba(143, 28, 88, 0.14);
+    text-decoration: none;
+}
+
+.page-title {
+    margin: 0 0 24px;
+    color: #b51668;
+    font-size: 30px;
+    font-weight: 800;
+}
+
 .hidden {
     display: none;
 }
 
 .card {
-    border: 1px solid #ccc;
-    padding: 24px;
-    margin-bottom: 16px;
-    max-width: 500px;
+    width: 100%;
+    min-height: 300px;
+    padding: 44px;
+    margin-bottom: 26px;
+    border: 2px solid #ff9ac8;
+    border-radius: 18px;
+    background: #fff7fb;
+    box-shadow: 0 20px 45px rgba(202, 44, 120, 0.22);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#category {
+    margin: 0 0 18px;
+    color: #d12b7d;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+#question {
+    margin: 0;
+    color: #8f1c58;
+    font-size: 34px;
+    line-height: 1.25;
+}
+
+#answer {
+    margin: 28px 0 0;
+    color: #6f3151;
+    font-size: 22px;
+    line-height: 1.5;
+}
+
+button {
+    min-width: 138px;
+    margin: 6px;
+    padding: 13px 20px;
+    border: 0;
+    border-radius: 999px;
+    color: #ffffff;
+    background: #ec4f9a;
+    box-shadow: 0 8px 18px rgba(190, 32, 108, 0.22);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+}
+
+button:hover {
+    background: #d93686;
+    box-shadow: 0 10px 22px rgba(190, 32, 108, 0.28);
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.card-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.card-actions button {
+    margin: 0;
+}
+
+ul {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+li {
+    margin-bottom: 12px;
+}
+
+li a {
+    display: block;
+    padding: 18px 22px;
+    border: 2px solid #ff9ac8;
+    border-radius: 16px;
+    color: #a71961;
+    background: #fff7fb;
+    box-shadow: 0 12px 28px rgba(202, 44, 120, 0.16);
+    font-size: 22px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+li a:hover {
+    background: #ffe6f1;
+}
+
+@media (max-width: 560px) {
+    main {
+        padding: 28px 14px 36px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    .logo {
+        min-width: 0;
+        padding: 0;
+        font-size: 34px;
+    }
+
+    .logo::before {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+    }
+
+    .page-title {
+        font-size: 25px;
+    }
+
+    .card {
+        min-height: 260px;
+        padding: 28px;
+    }
+
+    #question {
+        font-size: 26px;
+    }
+
+    #answer {
+        font-size: 19px;
+    }
+
+    button {
+        width: 100%;
+        margin: 6px 0;
+    }
+
+    .card-actions {
+        width: 100%;
+        gap: 0;
+    }
 }

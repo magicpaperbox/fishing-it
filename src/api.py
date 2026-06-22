@@ -37,10 +37,20 @@ def import_flashcards():
 
     db = get_db()
 
+    name = data["name"].strip()
+    existing_deck = db.execute("""
+        SELECT id
+        FROM decks
+        WHERE lower(trim(name)) = lower(?)
+    """, (name,)).fetchone()
+
+    if existing_deck is not None:
+        return {"error": "deck name already exists"}, 409
+
     cursor = db.execute("""
         INSERT INTO decks (name)
         VALUES (?)
-    """, (data["name"],))
+    """, (name,))
 
     deck_id = cursor.lastrowid
     for flashcard in flashcards:

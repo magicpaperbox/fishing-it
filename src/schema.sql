@@ -3,6 +3,9 @@ CREATE TABLE IF NOT EXISTS decks (
     name TEXT NOT NULL
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_decks_name_unique
+ON decks (lower(trim(name)));
+
 CREATE TABLE IF NOT EXISTS flashcards (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     deck_id INTEGER NOT NULL,

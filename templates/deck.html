@@ -2,12 +2,12 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Fiszki</title>
+    <title>FishingIT</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <main>
-    <h1>Fiszki</h1>
+    <a href="/" class="logo">FishingIT</a>
 
     <section class="card">
         <p id="category"></p>
@@ -15,10 +15,12 @@
         <p id="answer" class="hidden"></p>
     </section>
 
-    <button id="show-answer">Pokaż odpowiedź</button>
-    <button id="next-card">Następna</button>
-    <button id="known">Umiem</button>
-    <button id="unknown">Nie umiem</button>
+    <button id="show-answer">Poka&#380; odpowied&#378;</button>
+    <div class="card-actions">
+        <button id="next-card">Nast&#281;pna</button>
+        <button id="known">Umiem</button>
+        <button id="unknown">Nie umiem</button>
+    </div>
 </main>
 
 <script>
