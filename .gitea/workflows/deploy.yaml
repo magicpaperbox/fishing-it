@@ -1,0 +1,64 @@
+name: Deploy
+run-name: Deploy - ${{ gitea.actor }}
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: fishingit-deploy-main
+  cancel-in-progress: false
+
+env:
+  IMAGE: git.torchi.cc/home/fishingit:latest
+  DEPLOY_HOST: 10.0.0.67
+  DEPLOY_APP: fishingit
+
+jobs:
+  deploy:
+    runs-on: deploy
+    container:
+      volumes:
+        - /run/secrets/gitea/deployer_ssh_key:/run/secrets/deployer_ssh_key:ro
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to registry
+        env:
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "${REGISTRY_USERNAME:-}" ]; then
+            echo "ERROR: REGISTRY_USERNAME secret is empty" >&2
+            exit 1
+          fi
+          if [ -z "${REGISTRY_PASSWORD:-}" ]; then
+            echo "ERROR: REGISTRY_PASSWORD secret is empty" >&2
+            exit 1
+          fi
+          printf '%s' "$REGISTRY_PASSWORD" | docker login git.torchi.cc -u "$REGISTRY_USERNAME" --password-stdin
+
+      - name: Build and push image
+        run: |
+          set -euo pipefail
+          docker build --pull -t "$IMAGE" .
+          docker push "$IMAGE"
+
+      - name: Setup SSH for deployer
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          cp /run/secrets/deployer_ssh_key ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Redeploy on golduck
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes "deployer@$DEPLOY_HOST" \
+            "sudo /run/current-system/sw/bin/homelab-deploy-app '$DEPLOY_APP'"

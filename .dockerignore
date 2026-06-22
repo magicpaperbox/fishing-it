@@ -1,0 +1,7 @@
+.git
+.gitea
+.idea
+.venv
+__pycache__
+*.pyc
+*.sqlite
