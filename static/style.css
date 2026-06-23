@@ -90,6 +90,42 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+}
+
+.card.known-effect::after,
+.card.unknown-effect::after {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: rgba(255, 247, 251, 0.78);
+    font-size: 90px;
+    font-weight: 900;
+    animation: pop 500ms ease;
+}
+
+.card.known-effect::after {
+    content: "✓";
+    color: #2fbf71;
+}
+
+.card.unknown-effect::after {
+    content: "×";
+    color: #e24b6b;
+}
+
+@keyframes pop {
+    from {
+        opacity: 0;
+        transform: scale(0.65);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 #category {

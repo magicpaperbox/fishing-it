@@ -7,11 +7,12 @@ const showAnswerButton = document.querySelector("#show-answer");
 const nextCardButton = document.querySelector("#next-card");
 const knownButton = document.querySelector("#known");
 const unknownButton = document.querySelector("#unknown");
+const cardElement = document.querySelector(".card");
 
 let knownCards = [];
 let unknownCards = [];
 
-function showCard(){
+function showCard() {
     const card = flashcards[currentIndex];
 
     categoryElement.textContent = card.category;
@@ -33,28 +34,50 @@ function updateStatus(cardId, status) {
     });
 }
 
-showAnswerButton.addEventListener("click", function (){
+
+showAnswerButton.addEventListener("click", function () {
     answerElement.classList.toggle("hidden");
 })
 
-nextCardButton.addEventListener("click", function (){
+nextCardButton.addEventListener("click", function () {
     currentIndex++;
-    if (currentIndex >= flashcards.length){
+    if (currentIndex >= flashcards.length) {
         currentIndex = 0;
     }
     showCard();
 });
 
-knownButton.addEventListener("click", function (){
+function answerCard(status) {
     const card = flashcards[currentIndex];
-    card.status = "known";
-    updateStatus(card.id, "known");
+    card.status = status;
+    updateStatus(card.id, status);
+
+    if (status === "known") {
+        cardElement.classList.add("known-effect");
+    } else {
+        cardElement.classList.add("unknown-effect")
+    }
+
+    setTimeout(function () {
+        cardElement.classList.remove("known-effect");
+        cardElement.classList.remove("unknown-effect");
+
+        currentIndex++;
+        if (currentIndex >= flashcards.length) {
+            currentIndex = 0;
+        }
+        showCard();
+    }, 500);
+
+
+}
+
+knownButton.addEventListener("click", function () {
+    answerCard("known");
 });
 
 unknownButton.addEventListener("click", function () {
-    const card = flashcards[currentIndex];
-    card.status = "unknown";
-    updateStatus(card.id, "unknown");
+    answerCard("unknown");
 });
 
 showCard();
