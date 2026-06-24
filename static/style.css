@@ -93,6 +93,10 @@ h1 {
     position: relative;
 }
 
+.card.hidden {
+    display: none;
+}
+
 .card.known-effect::after,
 .card.unknown-effect::after {
     position: absolute;
@@ -107,13 +111,83 @@ h1 {
 }
 
 .card.known-effect::after {
-    content: "✓";
+    content: "\2713";
     color: #2fbf71;
 }
 
 .card.unknown-effect::after {
-    content: "×";
+    content: "\00D7";
     color: #e24b6b;
+}
+
+#summary-chart {
+    width: 180px;
+    height: 180px;
+    margin: 20px auto;
+    border-radius: 50%;
+    border: 6px solid #fff7fb;
+    box-shadow: 0 12px 28px rgba(202, 44, 120, 0.18);
+}
+
+#summary {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 28px;
+    padding: 32px 28px;
+    border: 2px solid #ff9ac8;
+    border-radius: 18px;
+    background: rgba(255, 247, 251, 0.8);
+    box-shadow: 0 18px 38px rgba(202, 44, 120, 0.18);
+}
+
+#summary.hidden {
+    display: none;
+}
+
+#summary h2 {
+    margin: 0 0 12px;
+    color: #8f1c58;
+    font-size: 30px;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 18px 0 24px;
+    color: #6f3151;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.chart-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.chart-legend b {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(143, 28, 88, 0.18);
+}
+
+.known-dot {
+    background: #B2FF66;
+}
+
+.unknown-dot {
+    background: #FF6666;
+}
+
+.not-done-dot {
+    background: #c9b6c1;
+}
+
+#restart {
+    margin-top: 4px;
 }
 
 @keyframes pop {
