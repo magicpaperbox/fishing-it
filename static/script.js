@@ -20,6 +20,7 @@ const summaryChartElement = document.querySelector("#summary-chart");
 
 let knownCards = flashcards.filter(card => card.status === "known").length;
 let unknownCards = flashcards.filter(card => card.status === "unknown").length;
+let notDoneCards = flashcards.filter(card => card.status !== "known" && card.status !== "unknown").length
 let currentFlashcards = flashcards;
 
 function showCard() {
@@ -35,7 +36,7 @@ function showCard() {
 function showSummary() {
     const knownCount = knownCards;
     const unknownCount = unknownCards;
-    const notDoneCount = 0;
+    const notDoneCount = notDoneCards;
 
     cardElement.classList.add("hidden");
     showAnswerButton.classList.add("hidden");
@@ -55,7 +56,7 @@ function showSummary() {
 
     knownCountElement.textContent = `Umiem: ${knownCount}`;
     unknownCountElement.textContent = `Nie umiem: ${unknownCount}`;
-    notDoneCountElement.textContent = `Nie przerobione ${notDoneCount}`;
+    notDoneCountElement.textContent = `Nie przerobione: ${notDoneCount}`;
 
     if (unknownCount === 0){
         restartButton.classList.add("hidden");
