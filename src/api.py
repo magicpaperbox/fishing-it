@@ -1,22 +1,26 @@
 from flask import render_template, Blueprint, redirect, abort, request
 from db import get_db
-from domain import Flashcard, FlashcardStatus
+from domain import Flashcard, FlashcardStatus, Deck, normalize_deck_name
 from repository import FlashcardRepository
 
 main_api = Blueprint('main', __name__, url_prefix="/")
 
 
+def get_flashcards_repo():
+    return FlashcardRepository(get_db())
+
+
 @main_api.route('/')
 def index():
-    repo = FlashcardRepository(get_db())
-    decks = repo.list_decks()
+    repo = get_flashcards_repo()
+    decks = repo.get_all_decks()
 
     return render_template("index.html", decks=decks)
 
 @main_api.route('/decks/<int:deck_id>')
 def show_deck(deck_id):
-    repo = FlashcardRepository(get_db())
-    flashcards = repo.get_flashcards_by_deck(deck_id)
+    repo = get_flashcards_repo()
+    flashcards = repo.get_by_deck(deck_id)
     flashcards_json = [
         {
             "id": flashcard.id,
@@ -35,36 +39,31 @@ def show_deck(deck_id):
 @main_api.route('/import_flashcards', methods=['POST'])
 def import_flashcards():
     data = request.get_json()
-
-    repo = FlashcardRepository(get_db())
-
     flashcards = data["flashcards"]
     if not isinstance(flashcards, list):
         raise TypeError('flashcards must be a list')
-
-
     name = data["name"].strip()
+
+    repo = get_flashcards_repo()
     existing_deck = repo.check_if_deck_exists_by_name(name)
 
     if existing_deck:
         return {"error": "deck name already exists"}, 409
 
-    deck = repo.create_deck(name)
-    deck_id = deck.id
-
+    deck = repo.add_deck(Deck(id=None, name=normalize_deck_name(name)))
     for flashcard_data in flashcards:
         flashcard = Flashcard(
             id=None,
-            deck_id=deck_id,
+            deck_id=deck.id,
             category=flashcard_data["category"],
             question=flashcard_data["question"],
             answer=flashcard_data["answer"],
         )
-        repo.add_flashcard(deck_id, flashcard)
+        repo.add_flashcard(deck.id, flashcard)
 
     return {
         "message": f"Dodano {len(flashcards)} fiszek.",
-        "deck_id": deck_id,
+        "deck_id": deck.id,
         "count": len(flashcards)
     }, 201
 
@@ -78,7 +77,7 @@ def add_flashcard(deck_id):
         question=data["question"],
         answer=data["answer"],
     )
-    repo = FlashcardRepository(get_db())
+    repo = get_flashcards_repo()
     saved_flashcard = repo.add_flashcard(deck_id, flashcard)
 
     return {
@@ -99,7 +98,7 @@ def update_flashcard(flashcard_id):
         raise TypeError('unsupported flashcard status')
 
     status = FlashcardStatus(status)
-    repo = FlashcardRepository(get_db())
+    repo = get_flashcards_repo()
     repo.update_flashcard_status(flashcard_id, status)
 
 

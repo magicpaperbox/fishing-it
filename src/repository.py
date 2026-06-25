@@ -5,7 +5,7 @@ class FlashcardRepository:
     def __init__(self, db):
         self.db = db
 
-    def list_decks(self) -> list[Deck]:
+    def get_all_decks(self) -> list[Deck]:
         rows = self.db.execute("""
         SELECT id, name 
         FROM decks
@@ -16,7 +16,7 @@ class FlashcardRepository:
             for row in rows
         ]
 
-    def get_flashcards_by_deck(self, deck_id: int) -> list[Flashcard]:
+    def get_by_deck(self, deck_id: int) -> list[Flashcard]:
         rows = self.db.execute("""
         SELECT id, deck_id, category, question, answer, status 
         FROM flashcards
@@ -45,15 +45,17 @@ class FlashcardRepository:
 
         return row is not None
 
-    def create_deck(self, name: str) -> Deck:
-        name = normalize_deck_name(name)
+    def add_deck(self, deck: Deck) -> Deck:
+        if deck.id is not None:
+            raise ValueError("Cannot add deck with id")
+
         cursor = self.db.execute("""
             INSERT INTO decks (name)
             VALUES (?)
-        """, (name,))
+        """, (deck.name,))
 
         self.db.commit()
-        return Deck(id=cursor.lastrowid, name=name)
+        return Deck(id=cursor.lastrowid, name=deck.name)
 
 
     def add_flashcard(self, deck_id: int, flashcard: Flashcard) -> Flashcard:
@@ -79,7 +81,7 @@ class FlashcardRepository:
             status=flashcard.status,
         )
 
-    def update_flashcard_status(self, flashcard_id, status: FlashcardStatus) -> None:
+    def update_flashcard_status(self, flashcard_id: int, status: FlashcardStatus) -> None:
         self.db.execute("""
             UPDATE flashcards
             SET status = ?
