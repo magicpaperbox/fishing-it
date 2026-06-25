@@ -1,21 +1,27 @@
-from flask import Flask, render_template
-import sqlite3
+from dataclasses import dataclass
+from enum import StrEnum
 
-flashcards = [
-    {
-        "question": "Co robi querySelector?",
-        "answer": "Wybiera pierwszy element HTML pasujący do selektora CSS.",
-        "category": "JavaScript DOM"
-    },
-    {
-        "question": "Do czego służy Flask?",
-        "answer": "Do tworzenia backendu i obsługi tras w Pythonie.",
-        "category": "Backend"
-    },
-    {
-        "question": "Co to jest SQLite?",
-        "answer": "Lekka baza danych zapisywana w pliku.",
-        "category": "Baza danych"
-    }
-]
+class FlashcardStatus(StrEnum):
+    NEW = "new"
+    KNOWN = "known"
+    UNKNOWN = "unknown"
 
+@dataclass(frozen=True)
+class Deck:
+    id : int | None
+    name : str
+
+@dataclass(frozen=True)
+class Flashcard:
+    id : int | None
+    deck_id: int
+    category : str
+    question : str
+    answer : str
+    status : FlashcardStatus = FlashcardStatus.NEW
+
+def normalize_deck_name(deck_name: str) -> str:
+    deck_name = deck_name.strip()
+    if not deck_name:
+        raise ValueError("deck_name cannot be empty")
+    return deck_name
