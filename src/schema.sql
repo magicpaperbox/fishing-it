@@ -15,3 +15,7 @@ CREATE TABLE IF NOT EXISTS flashcards (
     status TEXT NOT NULL DEFAULT 'not_started',
     FOREIGN KEY (deck_id) REFERENCES decks (id) ON DELETE CASCADE
 );
+
+UPDATE flashcards SET status = 'not_started' WHERE status = 'new';
+UPDATE flashcards SET status = 'needs_practice' WHERE status = 'unknown';
+UPDATE flashcards SET status = 'not_started' WHERE status = 'known';

@@ -20,7 +20,7 @@ const summaryChartElement = document.querySelector("#summary-chart");
 
 let masteredCards = flashcards.filter(card => card.status === "mastered").length;
 let needsPracticeCards = flashcards.filter(card => card.status === "needs_practice").length;
-let notDoneCards = flashcards.filter(card => card.status === "not_started").length
+let notStartedCards = flashcards.filter(card => card.status === "not_started").length
 let currentFlashcards = flashcards;
 
 function showCard() {
@@ -36,7 +36,7 @@ function showCard() {
 function showSummary() {
     const masteredCount = masteredCards;
     const needsPracticeCount = needsPracticeCards;
-    const notDoneCount = notDoneCards;
+    const notStartedCount = notStartedCards;
 
     cardElement.classList.add("hidden");
     showAnswerButton.classList.add("hidden");
@@ -44,7 +44,7 @@ function showSummary() {
     masteredButton.classList.add("hidden");
     needsPracticeButton.classList.add("hidden");
 
-    const total = masteredCount + needsPracticeCount + notDoneCount;
+    const total = masteredCount + needsPracticeCount + notStartedCount;
     const masteredPercent = masteredCount / total * 100;
     const needsPracticePercent = needsPracticeCount / total * 100;
     summaryChartElement.style.background = `
@@ -56,9 +56,9 @@ function showSummary() {
 
     masteredCountElement.textContent = `Umiem: ${masteredCount}`;
     needsPracticeCountElement.textContent = `Nie umiem: ${needsPracticeCount}`;
-    notDoneCountElement.textContent = `Nie przerobione: ${notDoneCount}`;
+    notDoneCountElement.textContent = `Nie przerobione: ${notStartedCount}`;
 
-    if (needsPracticeCount === 0 && notDoneCount === 0) {
+    if (needsPracticeCount === 0 && notStartedCount === 0) {
         continueStudyButton.classList.add("hidden");
     } else {
         continueStudyButton.classList.remove("hidden");
@@ -110,7 +110,7 @@ function updateCounters(previousStatus, newStatus) {
     }
 
     if (previousStatus === "not_started") {
-        notDoneCards--;
+        notStartedCards--;
     }
 
     if (newStatus === "mastered") {
@@ -122,7 +122,7 @@ function updateCounters(previousStatus, newStatus) {
     }
 
     if (newStatus === "not_started") {
-        notDoneCards++;
+        notStartedCards++;
     }
 }
 
@@ -150,7 +150,7 @@ function answerCard(status) {
 function startStudy(mode) {
     currentIndex = 0;
 
-    if (mode === "unfinished") {
+    if (mode === "not_mastered") {
         currentFlashcards = flashcards.filter(card => card.status !== "mastered");
     } else {
         currentFlashcards = flashcards;
@@ -172,7 +172,7 @@ function startStudy(mode) {
 }
 
 continueStudyButton.addEventListener("click", function () {
-    startStudy("unfinished");
+    startStudy("not_mastered");
 });
 
 resetProgressButton.addEventListener("click", function () {
@@ -183,7 +183,7 @@ resetProgressButton.addEventListener("click", function () {
 
     masteredCards = 0;
     needsPracticeCards = 0;
-    notDoneCards = flashcards.length;
+    notStartedCards = flashcards.length;
 
     startStudy();
 })
