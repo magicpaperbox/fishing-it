@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, redirect, abort, request
+from flask import render_template, Blueprint, request
 from db import get_db
 from domain import Flashcard, FlashcardStatus, Deck, normalize_deck_name
 from repository import FlashcardRepository
@@ -17,20 +17,24 @@ def index():
 
     return render_template("index.html", decks=decks)
 
+
+def flashcard_to_json(flashcard):
+    return {
+        "id": flashcard.id,
+        "deck_id": flashcard.deck_id,
+        "category": flashcard.category,
+        "question": flashcard.question,
+        "answer": flashcard.answer,
+        "status": flashcard.status.value,
+    }
+
+
 @main_api.route('/decks/<int:deck_id>')
 def show_deck(deck_id):
     repo = get_flashcards_repo()
     flashcards = repo.get_by_deck(deck_id)
     flashcards_json = [
-        {
-            "id": flashcard.id,
-            "deck_id": flashcard.deck_id,
-            "category": flashcard.category,
-            "question": flashcard.question,
-            "answer": flashcard.answer,
-            "status": flashcard.status.value,
-        }
-        for flashcard in flashcards
+        flashcard_to_json(flashcard) for flashcard in flashcards
     ]
 
     return render_template("deck.html", flashcards=flashcards_json)
@@ -67,6 +71,7 @@ def import_flashcards():
         "count": len(flashcards)
     }, 201
 
+
 @main_api.route('/decks/<int:deck_id>/flashcards', methods=['POST'])
 def add_flashcard(deck_id):
     data = request.get_json()
@@ -80,27 +85,20 @@ def add_flashcard(deck_id):
     repo = get_flashcards_repo()
     saved_flashcard = repo.add_flashcard(deck_id, flashcard)
 
-    return {
-        "id": saved_flashcard.id,
-        "deck_id": saved_flashcard.deck_id,
-        "category": saved_flashcard.category,
-        "question": saved_flashcard.question,
-        "answer": saved_flashcard.answer,
-        "status": saved_flashcard.status.value
-    }, 201
+    return flashcard_to_json(saved_flashcard), 201
+
 
 @main_api.route('/flashcards/<int:flashcard_id>/status', methods=['PATCH'])
 def update_flashcard(flashcard_id):
     data = request.get_json()
     status = data["status"]
 
-    if status not in ["new", "known", "unknown"]:
+    if status not in ["not_started", "mastered", "needs_practice"]:
         raise TypeError('unsupported flashcard status')
 
     status = FlashcardStatus(status)
     repo = get_flashcards_repo()
     repo.update_flashcard_status(flashcard_id, status)
-
 
     return {
         "id": flashcard_id,

@@ -97,8 +97,8 @@ h1 {
     display: none;
 }
 
-.card.known-effect::after,
-.card.unknown-effect::after {
+.card.mastered-effect::after,
+.card.needs-practice-effect::after {
     position: absolute;
     inset: 0;
     display: grid;
@@ -110,12 +110,12 @@ h1 {
     animation: pop 500ms ease;
 }
 
-.card.known-effect::after {
+.card.mastered-effect::after {
     content: "\2713";
     color: #2fbf71;
 }
 
-.card.unknown-effect::after {
+.card.needs-practice-effect::after {
     content: "\00D7";
     color: #e24b6b;
 }
@@ -174,11 +174,11 @@ h1 {
     box-shadow: 0 2px 6px rgba(143, 28, 88, 0.18);
 }
 
-.known-dot {
+.mastered-dot {
     background: #B2FF66;
 }
 
-.unknown-dot {
+.needs-practice-dot {
     background: #FF6666;
 }
 
@@ -186,7 +186,7 @@ h1 {
     background: #c9b6c1;
 }
 
-#restart {
+#continue-study {
     margin-top: 4px;
 }
 

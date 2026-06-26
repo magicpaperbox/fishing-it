@@ -3,10 +3,10 @@ from domain import Deck, Flashcard, FlashcardStatus, normalize_deck_name
 
 class FlashcardRepository:
     def __init__(self, db):
-        self.db = db
+        self._db = db
 
     def get_all_decks(self) -> list[Deck]:
-        rows = self.db.execute("""
+        rows = self._db.execute("""
         SELECT id, name 
         FROM decks
         """).fetchall()
@@ -17,7 +17,7 @@ class FlashcardRepository:
         ]
 
     def get_by_deck(self, deck_id: int) -> list[Flashcard]:
-        rows = self.db.execute("""
+        rows = self._db.execute("""
         SELECT id, deck_id, category, question, answer, status 
         FROM flashcards
         WHERE deck_id = ?
@@ -37,7 +37,7 @@ class FlashcardRepository:
 
     def check_if_deck_exists_by_name(self, name: str) -> bool:
         name = normalize_deck_name(name)
-        row = self.db.execute("""
+        row = self._db.execute("""
         SELECT id
         FROM decks
         WHERE lower(trim(name)) = lower(?)
@@ -49,17 +49,16 @@ class FlashcardRepository:
         if deck.id is not None:
             raise ValueError("Cannot add deck with id")
 
-        cursor = self.db.execute("""
+        cursor = self._db.execute("""
             INSERT INTO decks (name)
             VALUES (?)
         """, (deck.name,))
 
-        self.db.commit()
+        self._db.commit()
         return Deck(id=cursor.lastrowid, name=deck.name)
 
-
     def add_flashcard(self, deck_id: int, flashcard: Flashcard) -> Flashcard:
-        cursor = self.db.execute("""
+        cursor = self._db.execute("""
                     INSERT INTO flashcards (deck_id, category, question, answer, status)
                     VALUES (?, ?, ?, ?, ?)
                 """, (
@@ -70,7 +69,7 @@ class FlashcardRepository:
             flashcard.status.value,
         ))
 
-        self.db.commit()
+        self._db.commit()
 
         return Flashcard(
             id=cursor.lastrowid,
@@ -82,9 +81,9 @@ class FlashcardRepository:
         )
 
     def update_flashcard_status(self, flashcard_id: int, status: FlashcardStatus) -> None:
-        self.db.execute("""
+        self._db.execute("""
             UPDATE flashcards
             SET status = ?
             WHERE id = ?
             """, (status.value, flashcard_id))
-        self.db.commit()
+        self._db.commit()

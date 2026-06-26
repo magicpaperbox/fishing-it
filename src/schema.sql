@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS flashcards (
     category TEXT NOT NULL,
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'new',
+    status TEXT NOT NULL DEFAULT 'not_started',
     FOREIGN KEY (deck_id) REFERENCES decks (id) ON DELETE CASCADE
 );

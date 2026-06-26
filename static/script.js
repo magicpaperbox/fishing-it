@@ -5,22 +5,22 @@ const answerElement = document.querySelector("#answer");
 
 const showAnswerButton = document.querySelector("#show-answer");
 const nextCardButton = document.querySelector("#next-card");
-const knownButton = document.querySelector("#known");
-const unknownButton = document.querySelector("#unknown");
-const restartButton = document.querySelector("#restart");
-const resetCardsButton = document.querySelector("#reset-cards");
+const masteredButton = document.querySelector("#mastered");
+const needsPracticeButton = document.querySelector("#needs-practice");
+const continueStudyButton = document.querySelector("#continue-study");
+const resetProgressButton = document.querySelector("#reset-progress");
 
 const cardElement = document.querySelector(".card");
 const summaryElement = document.querySelector("#summary");
-const knownCountElement = document.querySelector("#known-count");
-const unknownCountElement = document.querySelector("#unknown-count");
+const masteredCountElement = document.querySelector("#mastered-count");
+const needsPracticeCountElement = document.querySelector("#needs-practice-count");
 const notDoneCountElement = document.querySelector("#not-done-count");
 
 const summaryChartElement = document.querySelector("#summary-chart");
 
-let knownCards = flashcards.filter(card => card.status === "known").length;
-let unknownCards = flashcards.filter(card => card.status === "unknown").length;
-let notDoneCards = flashcards.filter(card => card.status !== "known" && card.status !== "unknown").length
+let masteredCards = flashcards.filter(card => card.status === "mastered").length;
+let needsPracticeCards = flashcards.filter(card => card.status === "needs_practice").length;
+let notDoneCards = flashcards.filter(card => card.status === "not_started").length
 let currentFlashcards = flashcards;
 
 function showCard() {
@@ -34,34 +34,34 @@ function showCard() {
 }
 
 function showSummary() {
-    const knownCount = knownCards;
-    const unknownCount = unknownCards;
+    const masteredCount = masteredCards;
+    const needsPracticeCount = needsPracticeCards;
     const notDoneCount = notDoneCards;
 
     cardElement.classList.add("hidden");
     showAnswerButton.classList.add("hidden");
     nextCardButton.classList.add("hidden");
-    knownButton.classList.add("hidden");
-    unknownButton.classList.add("hidden");
+    masteredButton.classList.add("hidden");
+    needsPracticeButton.classList.add("hidden");
 
-    const total = knownCount + unknownCount + notDoneCount;
-    const knownPercent = knownCount / total * 100;
-    const unknownPercent = unknownCount / total * 100;
+    const total = masteredCount + needsPracticeCount + notDoneCount;
+    const masteredPercent = masteredCount / total * 100;
+    const needsPracticePercent = needsPracticeCount / total * 100;
     summaryChartElement.style.background = `
         conic-gradient(
-            #B2FF66 0% ${knownPercent}%,
-            #FF6666 ${knownPercent}% ${knownPercent + unknownPercent}%,
-            #c9b6c1 ${knownPercent + unknownPercent}% 100%
+            #B2FF66 0% ${masteredPercent}%,
+            #FF6666 ${masteredPercent}% ${masteredPercent + needsPracticePercent}%,
+            #c9b6c1 ${masteredPercent + needsPracticePercent}% 100%
         )`;
 
-    knownCountElement.textContent = `Umiem: ${knownCount}`;
-    unknownCountElement.textContent = `Nie umiem: ${unknownCount}`;
+    masteredCountElement.textContent = `Umiem: ${masteredCount}`;
+    needsPracticeCountElement.textContent = `Nie umiem: ${needsPracticeCount}`;
     notDoneCountElement.textContent = `Nie przerobione: ${notDoneCount}`;
 
-    if (unknownCount === 0){
-        restartButton.classList.add("hidden");
+    if (needsPracticeCount === 0 && notDoneCount === 0) {
+        continueStudyButton.classList.add("hidden");
     } else {
-        restartButton.classList.remove("hidden");
+        continueStudyButton.classList.remove("hidden");
     }
 
     summaryElement.classList.remove("hidden");
@@ -84,33 +84,45 @@ showAnswerButton.addEventListener("click", function () {
     answerElement.classList.toggle("hidden");
 })
 
-nextCardButton.addEventListener("click", function () {
+function moveToNextCard() {
     currentIndex++;
     if (currentIndex >= currentFlashcards.length) {
         showSummary();
         return;
     }
     showCard();
+}
+
+nextCardButton.addEventListener("click", function () {
+    moveToNextCard();
 });
 
-function updateCounters(previousStatus, newStatus){
-    if (previousStatus === newStatus){
+function updateCounters(previousStatus, newStatus) {
+    if (previousStatus === newStatus) {
         return;
     }
-    if (previousStatus === "known"){
-        knownCards--;
+    if (previousStatus === "mastered") {
+        masteredCards--;
     }
 
-    if (previousStatus === "unknown"){
-        unknownCards--;
+    if (previousStatus === "needs_practice") {
+        needsPracticeCards--;
     }
 
-    if (newStatus === "known"){
-        knownCards++;
+    if (previousStatus === "not_started") {
+        notDoneCards--;
     }
 
-    if (newStatus === "unknown"){
-        unknownCards++;
+    if (newStatus === "mastered") {
+        masteredCards++;
+    }
+
+    if (newStatus === "needs_practice") {
+        needsPracticeCards++;
+    }
+
+    if (newStatus === "not_started") {
+        notDoneCards++;
     }
 }
 
@@ -121,37 +133,30 @@ function answerCard(status) {
     updateCounters(previousStatus, status);
     updateStatus(card.id, status);
 
-    if (status === "known") {
-        cardElement.classList.add("known-effect");
+    if (status === "mastered") {
+        cardElement.classList.add("mastered-effect");
     } else {
-        cardElement.classList.add("unknown-effect");
+        cardElement.classList.add("needs-practice-effect");
     }
 
     setTimeout(function () {
-        cardElement.classList.remove("known-effect");
-        cardElement.classList.remove("unknown-effect");
-
-        currentIndex++;
-        if (currentIndex >= currentFlashcards.length) {
-            showSummary();
-            return;
-        }
-
-        showCard();
+        cardElement.classList.remove("mastered-effect");
+        cardElement.classList.remove("needs-practice-effect");
+        moveToNextCard();
     }, 500);
 
 }
 
-function startStudy(mode){
+function startStudy(mode) {
     currentIndex = 0;
 
-    if (mode === "unknown") {
-        currentFlashcards = flashcards.filter(card => card.status === "unknown");
+    if (mode === "unfinished") {
+        currentFlashcards = flashcards.filter(card => card.status !== "mastered");
     } else {
         currentFlashcards = flashcards;
     }
 
-    if (currentFlashcards.length === 0){
+    if (currentFlashcards.length === 0) {
         showSummary();
         return;
     }
@@ -160,43 +165,35 @@ function startStudy(mode){
     cardElement.classList.remove("hidden");
     showAnswerButton.classList.remove("hidden");
     nextCardButton.classList.remove("hidden");
-    knownButton.classList.remove("hidden");
-    unknownButton.classList.remove("hidden");
+    masteredButton.classList.remove("hidden");
+    needsPracticeButton.classList.remove("hidden");
 
     showCard();
 }
 
-restartButton.addEventListener("click", function () {
-    startStudy("unknown");
+continueStudyButton.addEventListener("click", function () {
+    startStudy("unfinished");
 });
 
-resetCardsButton.addEventListener("click", function (){
-    flashcards.forEach(function (card){
-        card.status = "new";
-        updateStatus(card.id, "new");
+resetProgressButton.addEventListener("click", function () {
+    flashcards.forEach(function (card) {
+        card.status = "not_started";
+        updateStatus(card.id, "not_started");
     });
 
-     knownCards = 0;
-    unknownCards = 0;
-    currentFlashcards = flashcards;
-    currentIndex = 0;
+    masteredCards = 0;
+    needsPracticeCards = 0;
+    notDoneCards = flashcards.length;
 
-    summaryElement.classList.add("hidden");
-    cardElement.classList.remove("hidden");
-    showAnswerButton.classList.remove("hidden");
-    nextCardButton.classList.remove("hidden");
-    knownButton.classList.remove("hidden");
-    unknownButton.classList.remove("hidden");
-
-    showCard();
+    startStudy();
 })
 
-knownButton.addEventListener("click", function () {
-    answerCard("known");
+masteredButton.addEventListener("click", function () {
+    answerCard("mastered");
 });
 
-unknownButton.addEventListener("click", function () {
-    answerCard("unknown");
+needsPracticeButton.addEventListener("click", function () {
+    answerCard("needs_practice");
 });
 
-showCard();
+startStudy();
