@@ -15,6 +15,7 @@ const summaryElement = document.querySelector("#summary");
 const masteredCountElement = document.querySelector("#mastered-count");
 const needsPracticeCountElement = document.querySelector("#needs-practice-count");
 const notDoneCountElement = document.querySelector("#not-done-count");
+const studyProgressElement = document.querySelector("#study-progress");
 
 const summaryChartElement = document.querySelector("#summary-chart");
 
@@ -25,7 +26,7 @@ let currentFlashcards = flashcards;
 
 function showCard() {
     const card = currentFlashcards[currentIndex];
-
+    studyProgressElement.textContent = `${currentIndex + 1} z ${currentFlashcards.length}`
     categoryElement.textContent = card.category;
     questionElement.textContent = card.question;
     answerElement.textContent = card.answer;
@@ -38,6 +39,7 @@ function showSummary() {
     const needsPracticeCount = needsPracticeCards;
     const notStartedCount = notStartedCards;
 
+    studyProgressElement.classList.add("hidden");
     cardElement.classList.add("hidden");
     showAnswerButton.classList.add("hidden");
     nextCardButton.classList.add("hidden");
@@ -161,6 +163,7 @@ function startStudy(mode) {
         return;
     }
 
+    studyProgressElement.classList.remove("hidden");
     summaryElement.classList.add("hidden");
     cardElement.classList.remove("hidden");
     showAnswerButton.classList.remove("hidden");
