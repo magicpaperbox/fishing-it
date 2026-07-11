@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request
+from flask import render_template, Blueprint, request, redirect, url_for
 from db import get_db
 from domain import Flashcard, FlashcardStatus, Deck, normalize_deck_name
 from repository import FlashcardRepository
@@ -104,3 +104,9 @@ def update_flashcard(flashcard_id):
         "id": flashcard_id,
         "status": status
     }
+
+@main_api.route('/decks/<int:deck_id>/delete', methods=['POST'])
+def delete_deck(deck_id: int):
+    repo = get_flashcards_repo()
+    repo.delete_deck(deck_id)
+    return redirect(url_for("main.index"))

@@ -87,3 +87,10 @@ class FlashcardRepository:
             WHERE id = ?
             """, (status.value, flashcard_id))
         self._db.commit()
+
+    def delete_deck(self, deck_id: int) -> None:
+        self._db.execute("""
+        DELETE FROM decks
+        WHERE id = ?
+        """, (deck_id,))
+        self._db.commit()
