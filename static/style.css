@@ -215,17 +215,107 @@ h1 {
 }
 
 #question {
+    width: 100%;
     margin: 0;
     color: #8f1c58;
     font-size: 34px;
+    font-weight: 800;
     line-height: 1.25;
 }
 
 #answer {
+    width: 100%;
     margin: 28px 0 0;
     color: #6f3151;
     font-size: 22px;
     line-height: 1.5;
+}
+
+#question p,
+#answer p {
+    margin: 0 0 0.8em;
+}
+
+#question p:last-child,
+#answer p:last-child,
+#question ul:last-child,
+#answer ul:last-child,
+#question ol:last-child,
+#answer ol:last-child,
+#question pre:last-child,
+#answer pre:last-child {
+    margin-bottom: 0;
+}
+
+#question h3,
+#question h4,
+#question h5,
+#answer h3,
+#answer h4,
+#answer h5 {
+    margin: 0 0 0.55em;
+    color: inherit;
+    line-height: 1.2;
+}
+
+#question ul,
+#question ol,
+#answer ul,
+#answer ol {
+    width: min(100%, 620px);
+    margin: 0.2em auto 0.8em;
+    padding-left: 1.4em;
+    text-align: left;
+}
+
+#question li,
+#answer li {
+    margin: 0.22em 0;
+}
+
+#question code,
+#answer code {
+    padding: 0.1em 0.32em;
+    border-radius: 6px;
+    color: #6a2246;
+    background: #ffe4f1;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.86em;
+}
+
+#question pre,
+#answer pre {
+    width: min(100%, 620px);
+    margin: 0.7em auto 0.9em;
+    padding: 16px 18px;
+    border: 1px solid #ffb1d1;
+    border-radius: 8px;
+    color: #4e1f38;
+    background: #fff0f7;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.55;
+    overflow-x: auto;
+    text-align: left;
+    white-space: pre;
+}
+
+#question pre code,
+#answer pre code {
+    padding: 0;
+    border-radius: 0;
+    color: inherit;
+    background: transparent;
+    font-size: 1em;
+    white-space: inherit;
+}
+
+#question a,
+#answer a {
+    color: #b51668;
+    font-weight: 800;
 }
 
 button {
@@ -398,6 +488,13 @@ button:active {
         margin-top: 22px;
         font-size: 19px;
         overflow-wrap: anywhere;
+    }
+
+    #question pre,
+    #answer pre {
+        width: 100%;
+        padding: 14px;
+        font-size: 15px;
     }
 
     #category {

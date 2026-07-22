@@ -24,12 +24,161 @@ let needsPracticeCards = flashcards.filter(card => card.status === "needs_practi
 let notStartedCards = flashcards.filter(card => card.status === "not_started").length
 let currentFlashcards = flashcards;
 
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function getCodeLanguageClass(language) {
+    const normalizedLanguage = language.trim().split(/\s+/)[0].toLowerCase();
+
+    if (!normalizedLanguage.match(/^[a-z0-9_-]+$/)) {
+        return "";
+    }
+
+    return ` class="language-${normalizedLanguage}"`;
+}
+
+function renderInlineMarkdown(text) {
+    const codeTokens = [];
+    let html = escapeHtml(text).replace(/`([^`\n]+)`/g, function (_, code) {
+        const tokenIndex = codeTokens.length;
+        codeTokens.push(`<code>${code}</code>`);
+        return `\u0000${tokenIndex}\u0000`;
+    });
+
+    html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    html = html.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+    html = html.replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
+    html = html.replace(/_([^_\n]+)_/g, "<em>$1</em>");
+
+    return html.replace(/\u0000(\d+)\u0000/g, function (_, tokenIndex) {
+        return codeTokens[Number(tokenIndex)];
+    });
+}
+
+function isListItem(line) {
+    return line.match(/^[-*]\s+/) || line.match(/^\d+\.\s+/);
+}
+
+function renderMarkdownList(lines, startIndex, ordered) {
+    const items = [];
+    const listItemPattern = ordered ? /^\d+\.\s+(.*)$/ : /^[-*]\s+(.*)$/;
+    let index = startIndex;
+
+    while (index < lines.length) {
+        const match = lines[index].trim().match(listItemPattern);
+
+        if (!match) {
+            break;
+        }
+
+        items.push(`<li>${renderInlineMarkdown(match[1])}</li>`);
+        index++;
+    }
+
+    const tagName = ordered ? "ol" : "ul";
+    return {
+        html: `<${tagName}>${items.join("")}</${tagName}>`,
+        nextIndex: index,
+    };
+}
+
+function renderMarkdown(markdown) {
+    const lines = String(markdown ?? "").replaceAll("\r\n", "\n").replaceAll("\r", "\n").split("\n");
+    const blocks = [];
+    let index = 0;
+
+    while (index < lines.length) {
+        const line = lines[index];
+        const trimmedLine = line.trim();
+
+        if (trimmedLine === "") {
+            index++;
+            continue;
+        }
+
+        if (trimmedLine.startsWith("```")) {
+            const language = trimmedLine.slice(3);
+            const codeLines = [];
+            index++;
+
+            while (index < lines.length && !lines[index].trim().startsWith("```")) {
+                codeLines.push(lines[index]);
+                index++;
+            }
+
+            if (index < lines.length) {
+                index++;
+            }
+
+            blocks.push(`<pre><code${getCodeLanguageClass(language)}>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+            continue;
+        }
+
+        const headingMatch = trimmedLine.match(/^(#{1,3})\s+(.*)$/);
+
+        if (headingMatch) {
+            const headingLevel = Number(headingMatch[1].length) + 2;
+            blocks.push(`<h${headingLevel}>${renderInlineMarkdown(headingMatch[2])}</h${headingLevel}>`);
+            index++;
+            continue;
+        }
+
+        if (trimmedLine.match(/^[-*]\s+/)) {
+            const list = renderMarkdownList(lines, index, false);
+            blocks.push(list.html);
+            index = list.nextIndex;
+            continue;
+        }
+
+        if (trimmedLine.match(/^\d+\.\s+/)) {
+            const list = renderMarkdownList(lines, index, true);
+            blocks.push(list.html);
+            index = list.nextIndex;
+            continue;
+        }
+
+        const paragraphLines = [];
+
+        while (index < lines.length) {
+            const currentLine = lines[index];
+            const currentTrimmedLine = currentLine.trim();
+
+            if (
+                currentTrimmedLine === "" ||
+                currentTrimmedLine.startsWith("```") ||
+                currentTrimmedLine.match(/^(#{1,3})\s+/) ||
+                isListItem(currentTrimmedLine)
+            ) {
+                break;
+            }
+
+            paragraphLines.push(currentLine);
+            index++;
+        }
+
+        blocks.push(`<p>${paragraphLines.map(renderInlineMarkdown).join("<br>")}</p>`);
+    }
+
+    return blocks.join("");
+}
+
+function setMarkdownContent(element, markdown) {
+    element.innerHTML = renderMarkdown(markdown);
+}
+
 function showCard() {
     const card = currentFlashcards[currentIndex];
     studyProgressElement.textContent = `${currentIndex + 1} z ${currentFlashcards.length}`
     categoryElement.textContent = card.category;
-    questionElement.textContent = card.question;
-    answerElement.textContent = card.answer;
+    setMarkdownContent(questionElement, card.question);
+    setMarkdownContent(answerElement, card.answer);
 
     answerElement.classList.add("hidden");
 }
