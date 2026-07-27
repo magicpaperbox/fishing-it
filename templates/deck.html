@@ -10,17 +10,22 @@
 <main>
     <a href="/" class="logo">FishingIT</a>
 
-    <section class="card">
+    <section id="study-start">
+        <button id="start-from-scratch">Start from scratch</button>
+        <button id="resume-study">Continue study</button>
+    </section>
+
+    <section class="card hidden">
         <p id="category"></p>
         <div id="question" role="heading" aria-level="2"></div>
         <div id="answer" class="hidden"></div>
     </section>
-    <p id="study-progress"></p>
-    <button id="show-answer">Poka&#380; odpowied&#378;</button>
+    <p id="study-progress" class="hidden"></p>
+    <button id="show-answer" class="hidden">Poka&#380; odpowied&#378;</button>
     <div class="card-actions">
-        <button id="next-card">Nast&#281;pna</button>
-        <button id="mastered">Umiem</button>
-        <button id="needs-practice">Nie umiem</button>
+        <button id="next-card" class="hidden">Nast&#281;pna</button>
+        <button id="mastered" class="hidden">Umiem</button>
+        <button id="needs-practice" class="hidden">Nie umiem</button>
     </div>
 
     <section id="summary" class="hidden">
@@ -42,6 +47,7 @@
 
 <script>
     const flashcards = {{ flashcards | tojson }};
+    const deckId = {{ deck_id | tojson }};
 </script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 

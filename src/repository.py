@@ -94,3 +94,12 @@ class FlashcardRepository:
         WHERE id = ?
         """, (deck_id,))
         self._db.commit()
+
+
+    def reset_deck_progress(self, deck_id: int) -> None:
+        self._db.execute("""
+        UPDATE flashcards
+        SET status = ?
+        WHERE deck_id = ?
+        """, (FlashcardStatus.NOT_STARTED.value, deck_id))
+        self._db.commit()

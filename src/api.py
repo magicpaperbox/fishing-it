@@ -37,7 +37,7 @@ def show_deck(deck_id):
         flashcard_to_json(flashcard) for flashcard in flashcards
     ]
 
-    return render_template("deck.html", flashcards=flashcards_json)
+    return render_template("deck.html", flashcards=flashcards_json, deck_id=deck_id)
 
 
 @main_api.route('/import_flashcards', methods=['POST'])
@@ -103,6 +103,15 @@ def update_flashcard(flashcard_id):
     return {
         "id": flashcard_id,
         "status": status
+    }
+
+@main_api.route('/decks/<int:deck_id>/reset_progress', methods=['PATCH'])
+def reset_deck_progress(deck_id: int):
+    repo = get_flashcards_repo()
+    repo.reset_deck_progress(deck_id)
+    return {
+        "message": "Deck progress reset.",
+        "deck_id": deck_id
     }
 
 @main_api.route('/decks/<int:deck_id>/delete', methods=['POST'])

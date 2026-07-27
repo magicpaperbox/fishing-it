@@ -3,6 +3,9 @@ const categoryElement = document.querySelector("#category");
 const questionElement = document.querySelector("#question");
 const answerElement = document.querySelector("#answer");
 
+const studyStartElement = document.querySelector("#study-start");
+const startFromScratchButton = document.querySelector("#start-from-scratch");
+const resumeStudyButton = document.querySelector("#resume-study");
 const showAnswerButton = document.querySelector("#show-answer");
 const nextCardButton = document.querySelector("#next-card");
 const masteredButton = document.querySelector("#mastered");
@@ -231,6 +234,26 @@ function updateStatus(cardId, status) {
     });
 }
 
+function resetDeckProgress(deckId) {
+    return fetch(`/decks/${deckId}/reset_progress`, {
+        method: "PATCH"
+    });
+}
+
+function startStudyFromScratch() {
+    resetDeckProgress(deckId).then(function () {
+        flashcards.forEach(function (card) {
+            card.status = "not_started";
+        });
+
+        masteredCards = 0;
+        needsPracticeCards = 0;
+        notStartedCards = flashcards.length;
+
+        startStudy();
+    });
+}
+
 showAnswerButton.addEventListener("click", function () {
     answerElement.classList.toggle("hidden");
 })
@@ -311,7 +334,7 @@ function startStudy(mode) {
         showSummary();
         return;
     }
-
+    studyStartElement.classList.add("hidden");
     studyProgressElement.classList.remove("hidden");
     summaryElement.classList.add("hidden");
     cardElement.classList.remove("hidden");
@@ -328,17 +351,8 @@ continueStudyButton.addEventListener("click", function () {
 });
 
 resetProgressButton.addEventListener("click", function () {
-    flashcards.forEach(function (card) {
-        card.status = "not_started";
-        updateStatus(card.id, "not_started");
-    });
-
-    masteredCards = 0;
-    needsPracticeCards = 0;
-    notStartedCards = flashcards.length;
-
-    startStudy();
-})
+    startStudyFromScratch();
+});
 
 masteredButton.addEventListener("click", function () {
     answerCard("mastered");
@@ -348,4 +362,10 @@ needsPracticeButton.addEventListener("click", function () {
     answerCard("needs_practice");
 });
 
-startStudy();
+resumeStudyButton.addEventListener("click", function () {
+    startStudy("not_mastered");
+});
+
+startFromScratchButton.addEventListener("click", function () {
+    startStudyFromScratch();
+});
