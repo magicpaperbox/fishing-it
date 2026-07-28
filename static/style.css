@@ -6,6 +6,7 @@ body {
     min-height: 100vh;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
     color: #5f2644;
     background:
         radial-gradient(circle at top left, #ffe4f1 0, transparent 34%),
@@ -41,13 +42,8 @@ h1 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: min(100%, 360px);
+    max-width: 100%;
     padding: 0;
-    color: #b51668;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 48px;
-    font-weight: 800;
-    text-shadow: 0 3px 0 #ffd2e5;
     text-decoration: none;
 }
 
@@ -214,6 +210,18 @@ h1 {
     text-transform: uppercase;
 }
 
+#study-progress {
+    min-width: 92px;
+    margin: 0 0 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    color: #8f1c58;
+    background: rgba(255, 247, 251, 0.74);
+    box-shadow: 0 6px 16px rgba(202, 44, 120, 0.12);
+    font-size: 14px;
+    font-weight: 800;
+}
+
 #question {
     width: 100%;
     margin: 0;
@@ -333,6 +341,17 @@ button {
     transition: transform 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
 }
 
+button:focus-visible {
+    outline: 3px solid #7bdff2;
+    outline-offset: 3px;
+}
+
+.logo:focus-visible,
+.deck-link:focus-visible {
+    outline: 3px solid #7bdff2;
+    outline-offset: 4px;
+}
+
 button:hover {
     background: #d93686;
     box-shadow: 0 10px 22px rgba(190, 32, 108, 0.28);
@@ -343,7 +362,214 @@ button:active {
     transform: translateY(0);
 }
 
+button:disabled {
+    color: #8f6f81;
+    background: #f4d8e6;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.study-page {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    padding: 32px clamp(24px, 5vw, 86px) 34px;
+    position: relative;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.study-header {
+    width: auto;
+    position: absolute;
+    top: clamp(20px, 3vw, 36px);
+    left: clamp(24px, 5vw, 78px);
+    z-index: 2;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.study-page .logo {
+    align-self: flex-start;
+    margin-left: 0;
+}
+
+.study-page .logo-image {
+    width: clamp(118px, 9vw, 168px);
+    border-radius: 0;
+}
+
+.study-page .card {
+    max-width: 760px;
+    margin: clamp(10px, 2.5vh, 26px) auto 18px;
+}
+
+.study-page #study-progress,
+.study-page #show-answer,
+.study-page .card-actions,
+.study-page #summary {
+    align-self: center;
+}
+
+.study-page #study-progress {
+    text-align: center;
+}
+
+.study-page #summary {
+    margin-top: clamp(8px, 2vh, 24px);
+}
+
+#study-start.study-start-panel {
+    width: min(100%, 660px);
+    max-width: 660px;
+    margin: clamp(36px, 7vh, 76px) auto 0;
+    padding: 32px;
+    border: 1px solid rgba(236, 79, 154, 0.26);
+    border-radius: 18px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 247, 251, 0.94)),
+        #fff7fb;
+    box-shadow: 0 24px 60px rgba(167, 25, 97, 0.15);
+    display: block;
+}
+
+#study-start.hidden {
+    display: none;
+}
+
+.study-start-header {
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(236, 79, 154, 0.14);
+}
+
+.study-start-kicker {
+    margin: 0 0 4px;
+    color: #c74886;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.study-start-title {
+    margin: 0;
+    color: #7a2452;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.study-start-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.study-start-actions button {
+    width: 100%;
+    min-height: 112px;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid rgba(236, 79, 154, 0.2);
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(167, 25, 97, 0.08);
+    color: #7b174d;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+}
+
+#start-from-scratch {
+    color: #ffffff;
+    background: linear-gradient(145deg, #ec4f9a, #c92f68);
+    box-shadow: 0 16px 34px rgba(190, 32, 108, 0.25);
+}
+
+#resume-study {
+    color: #7b174d;
+    background: #ffffff;
+}
+
+.study-start-actions button:hover {
+    box-shadow: 0 16px 34px rgba(167, 25, 97, 0.16);
+}
+
+#start-from-scratch:hover {
+    background: linear-gradient(145deg, #d93686, #b72258);
+}
+
+#resume-study:hover {
+    color: #5f123b;
+    background: #fff0f7;
+}
+
+.study-action-label {
+    font-size: 21px;
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.study-action-detail {
+    margin-top: 7px;
+    color: rgba(123, 23, 77, 0.72);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+#start-from-scratch .study-action-detail {
+    color: rgba(255, 255, 255, 0.84);
+}
+
+#show-answer {
+    min-width: min(100%, 280px);
+    min-height: 54px;
+    margin-bottom: 8px;
+}
+
+#next-card,
+#previous-card {
+    color: #8f1c58;
+    background: #fff7fb;
+    border: 2px solid #ff9ac8;
+    box-shadow: 0 8px 18px rgba(202, 44, 120, 0.12);
+}
+
+#next-card:hover,
+#previous-card:hover {
+    color: #ffffff;
+    background: #c74886;
+}
+
+#mastered {
+    background: #2fbf71;
+    box-shadow: 0 8px 18px rgba(47, 191, 113, 0.22);
+}
+
+#mastered:hover {
+    background: #239e5c;
+    box-shadow: 0 10px 22px rgba(47, 191, 113, 0.28);
+}
+
+#needs-practice {
+    background: #e24b6b;
+    box-shadow: 0 8px 18px rgba(226, 75, 107, 0.22);
+}
+
+#needs-practice:hover {
+    background: #c93c59;
+    box-shadow: 0 10px 22px rgba(226, 75, 107, 0.28);
+}
+
 .card-actions {
+    width: 100%;
+    max-width: 620px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -352,6 +578,7 @@ button:active {
 }
 
 .card-actions button {
+    flex: 1 1 138px;
     margin: 0;
 }
 
@@ -384,6 +611,18 @@ button:active {
     font-size: 22px;
     font-weight: 800;
     text-decoration: none;
+}
+
+.logo::before {
+    display: none;
+}
+
+.logo-image {
+    display: block;
+    width: clamp(92px, 10vw, 124px);
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .deck-link:hover {
@@ -426,6 +665,222 @@ button:active {
     stroke-linejoin: round;
 }
 
+.home-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 48px clamp(32px, 6vw, 96px);
+    display: grid;
+    grid-template-columns: minmax(220px, 360px) minmax(520px, 780px);
+    gap: clamp(36px, 7vw, 108px);
+    align-items: center;
+    justify-content: center;
+}
+
+.home-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.home-page .logo {
+    align-self: auto;
+    margin-left: 0;
+}
+
+.home-page .logo-image {
+    width: clamp(220px, 23vw, 340px);
+}
+
+.home-content {
+    width: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.deck-panel {
+    width: 100%;
+    padding: 30px;
+    border: 1px solid rgba(236, 79, 154, 0.28);
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 247, 251, 0.92)),
+        #fff7fb;
+    box-shadow: 0 20px 54px rgba(167, 25, 97, 0.13);
+}
+
+.deck-panel-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(236, 79, 154, 0.16);
+    text-align: left;
+}
+
+.deck-panel-kicker {
+    margin: 0 0 4px;
+    color: #c74886;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.deck-count {
+    min-width: 42px;
+    height: 34px;
+    padding: 0 13px;
+    border: 1px solid rgba(236, 79, 154, 0.18);
+    border-radius: 999px;
+    color: #7a2452;
+    background: #fff0f7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.home-page .page-title {
+    margin: 0;
+    color: #7a2452;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+.home-page .deck-list {
+    display: grid;
+    gap: 10px;
+}
+
+.home-page .deck-list-item {
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+    padding: 8px;
+    border: 1px solid rgba(236, 79, 154, 0.13);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 6px 16px rgba(167, 25, 97, 0.05);
+    transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+.home-page .deck-list-item:hover {
+    border-color: rgba(236, 79, 154, 0.38);
+    background: #ffffff;
+    box-shadow: 0 12px 26px rgba(167, 25, 97, 0.1);
+    transform: translateY(-1px);
+}
+
+.home-page .deck-link {
+    min-height: 54px;
+    justify-content: flex-start;
+    gap: 13px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    box-shadow: none;
+    color: #7b174d;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.25;
+    text-align: left;
+    overflow-wrap: anywhere;
+    transition: background-color 140ms ease, color 140ms ease;
+}
+
+.deck-card-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    border-radius: 10px;
+    color: #ffffff;
+    background: linear-gradient(145deg, #ec4f9a, #a71961);
+    box-shadow: 0 8px 18px rgba(167, 25, 97, 0.18);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.deck-name {
+    min-width: 0;
+    flex: 1;
+}
+
+.home-page .deck-link:hover {
+    color: #5f123b;
+    background: #fff0f7;
+}
+
+.home-page .delete-deck-button {
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid rgba(236, 79, 154, 0.18);
+    border-radius: 11px;
+    color: #9f174f;
+    background: #fff0f7;
+    box-shadow: none;
+}
+
+.home-page .delete-deck-button:hover {
+    color: #ffffff;
+    background: #c92f68;
+    box-shadow: 0 10px 22px rgba(201, 47, 104, 0.22);
+}
+
+@media (max-width: 900px) {
+    .study-page {
+        padding: 28px clamp(18px, 5vw, 42px) 54px;
+    }
+
+    .study-header {
+        width: 100%;
+        position: static;
+        justify-content: center;
+    }
+
+    .study-page .logo {
+        align-self: center;
+    }
+
+    .study-page .logo-image {
+        width: clamp(128px, 26vw, 170px);
+    }
+
+    #study-start.study-start-panel {
+        margin-top: clamp(30px, 7vh, 58px);
+    }
+
+    .home-page {
+        padding: 28px clamp(18px, 5vw, 42px) 54px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .home-header {
+        margin-bottom: 22px;
+    }
+
+    .home-page .logo-image {
+        width: clamp(128px, 26vw, 170px);
+    }
+
+    .home-content {
+        max-width: 720px;
+    }
+}
+
 @media (max-width: 560px) {
     body {
         background:
@@ -437,6 +892,10 @@ button:active {
         width: 100%;
         min-height: 100svh;
         padding: 22px max(14px, env(safe-area-inset-right)) 30px max(14px, env(safe-area-inset-left));
+    }
+
+    .study-page {
+        padding-top: 16px;
     }
 
     h1 {
@@ -459,9 +918,155 @@ button:active {
         font-size: 20px;
     }
 
+    .study-header {
+        margin-bottom: 0;
+        justify-content: center;
+    }
+
+    .study-page .logo {
+        align-self: center;
+        width: clamp(142px, 42vw, 180px);
+        height: clamp(92px, 27vw, 116px);
+        margin-bottom: 0;
+        overflow: hidden;
+        align-items: flex-start;
+    }
+
+    .study-page .logo-image {
+        width: 100%;
+        max-width: none;
+        margin-top: -10%;
+        border-radius: 0;
+    }
+
+    #study-start.study-start-panel {
+        margin-top: 14px;
+        padding: 16px 12px 14px;
+        border-radius: 14px;
+    }
+
+    .study-start-header {
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+    }
+
+    .study-start-kicker {
+        font-size: 11px;
+    }
+
+    .study-start-title {
+        font-size: 24px;
+    }
+
+    .study-start-actions {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .study-start-actions button {
+        min-height: 72px;
+        padding: 15px 16px;
+        border-radius: 12px;
+    }
+
+    .study-action-label {
+        font-size: 18px;
+    }
+
+    .study-action-detail {
+        margin-top: 4px;
+        font-size: 13px;
+    }
+
     .page-title {
         margin-bottom: 18px;
         font-size: 24px;
+    }
+
+    .home-page {
+        width: 100%;
+        padding-top: 16px;
+    }
+
+    .home-header {
+        margin-bottom: 8px;
+        justify-content: center;
+    }
+
+    .home-page .logo {
+        align-self: center;
+        width: clamp(142px, 42vw, 180px);
+        height: clamp(92px, 27vw, 116px);
+        overflow: hidden;
+        align-items: flex-start;
+    }
+
+    .home-page .logo-image {
+        width: 100%;
+        max-width: none;
+        margin-top: -10%;
+        border-radius: 0;
+    }
+
+    .deck-panel {
+        width: 100%;
+        padding: 16px 12px;
+        border-radius: 14px;
+    }
+
+    .deck-panel-header {
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        align-items: center;
+    }
+
+    .deck-panel-kicker {
+        font-size: 11px;
+    }
+
+    .deck-count {
+        min-width: 36px;
+        height: 30px;
+        padding: 0 10px;
+        font-size: 14px;
+    }
+
+    .home-page .page-title {
+        font-size: 22px;
+        text-align: left;
+    }
+
+    .home-page .deck-list {
+        max-width: none;
+        gap: 9px;
+    }
+
+    .home-page .deck-list-item {
+        gap: 8px;
+        padding: 6px;
+        border-radius: 12px;
+    }
+
+    .home-page .deck-link {
+        min-height: 52px;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 17px;
+    }
+
+    .deck-card-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        font-size: 14px;
+    }
+
+    .home-page .delete-deck-button {
+        width: 42px;
+        min-width: 42px;
+        min-height: 42px;
+        border-radius: 10px;
     }
 
     .card {
@@ -470,6 +1075,11 @@ button:active {
         margin-bottom: 18px;
         border-radius: 14px;
         box-shadow: 0 14px 30px rgba(202, 44, 120, 0.18);
+    }
+
+    .study-page .card {
+        max-width: 100%;
+        margin-top: 14px;
     }
 
     .card.mastered-effect::after,

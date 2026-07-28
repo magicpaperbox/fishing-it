@@ -1,0 +1,16 @@
+{
+    "name": "FishingIT",
+    "short_name": "FishingIT",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fff3f8",
+    "theme_color": "#ffd6e8",
+    "icons": [
+        {
+            "src": "/static/icon_fish.png",
+            "sizes": "1254x1254",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

@@ -4,15 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FishingIT</title>
+    <link rel="icon" type="image/png" sizes="1254x1254" href="{{ url_for('static', filename='icon_fish.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon_fish.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <meta name="theme-color" content="#ffd6e8">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<main>
-    <a href="/" class="logo">FishingIT</a>
+<main class="study-page">
+    <header class="study-header">
+        <a href="/" class="logo" aria-label="FishingIT - strona glowna">
+            <img class="logo-image" src="{{ url_for('static', filename='fishing_it.png') }}" alt="FishingIT">
+        </a>
+    </header>
 
-    <section id="study-start">
-        <button id="start-from-scratch">Start from scratch</button>
-        <button id="resume-study">Continue study</button>
+    <section id="study-start" class="study-start-panel" aria-labelledby="study-start-title">
+        <div class="study-start-header">
+            <p class="study-start-kicker">Sesja fiszek</p>
+            <h1 id="study-start-title" class="study-start-title">Wybierz tryb nauki</h1>
+        </div>
+        <div class="study-start-actions">
+            <button id="start-from-scratch" type="button">
+                <span class="study-action-label">Od nowa</span>
+                <span class="study-action-detail">ca&#322;y zestaw</span>
+            </button>
+            <button id="resume-study" type="button">
+                <span class="study-action-label">Kontynuuj</span>
+                <span class="study-action-detail">do powt&#243;rki</span>
+            </button>
+        </div>
     </section>
 
     <section class="card hidden">
@@ -36,8 +56,8 @@
             <span><b class="needs-practice-dot"></b> Nie umiem</span>
             <span><b class="not-done-dot"></b> Nie przerobione</span>
         </div>
-        <button id="continue-study">Ucz się dalej</button>
-        <button id="reset-progress">Resetuj postęp</button>
+        <button id="continue-study">Ucz si&#281; dalej</button>
+        <button id="reset-progress">Resetuj post&#281;p</button>
 
         <p id="mastered-count"></p>
         <p id="needs-practice-count"></p>
