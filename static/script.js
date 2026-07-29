@@ -240,20 +240,6 @@ function resetDeckProgress(deckId) {
     });
 }
 
-function startStudyFromScratch() {
-    resetDeckProgress(deckId).then(function () {
-        flashcards.forEach(function (card) {
-            card.status = "not_started";
-        });
-
-        masteredCards = 0;
-        needsPracticeCards = 0;
-        notStartedCards = flashcards.length;
-
-        startStudy();
-    });
-}
-
 showAnswerButton.addEventListener("click", function () {
     answerElement.classList.toggle("hidden");
 })
@@ -321,6 +307,17 @@ function answerCard(status) {
 
 }
 
+function shuffleCards(cards){
+    const shuffledCards = [...cards];
+    for (let i = shuffledCards.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        const temporaryCard = shuffledCards[i];
+        shuffledCards[i] = shuffledCards[randomIndex];
+        shuffledCards[randomIndex] = temporaryCard;
+    }
+    return shuffledCards;
+}
+
 function startStudy(mode) {
     currentIndex = 0;
 
@@ -329,6 +326,8 @@ function startStudy(mode) {
     } else {
         currentFlashcards = flashcards;
     }
+
+    currentFlashcards = shuffleCards(currentFlashcards);
 
     if (currentFlashcards.length === 0) {
         showSummary();
@@ -344,6 +343,20 @@ function startStudy(mode) {
     needsPracticeButton.classList.remove("hidden");
 
     showCard();
+}
+
+function startStudyFromScratch() {
+    resetDeckProgress(deckId).then(function () {
+        flashcards.forEach(function (card) {
+            card.status = "not_started";
+        });
+
+        masteredCards = 0;
+        needsPracticeCards = 0;
+        notStartedCards = flashcards.length;
+
+        startStudy();
+    });
 }
 
 continueStudyButton.addEventListener("click", function () {
