@@ -69,6 +69,46 @@ function isListItem(line) {
     return line.match(/^[-*]\s+/) || line.match(/^\d+\.\s+/);
 }
 
+function splitInlineOrderedListItems(line) {
+    const leadingWhitespace = line.match(/^\s*/)[0];
+    const trimmedLine = line.trim();
+
+    if (!trimmedLine.match(/^\d+\.\s+/)) {
+        return [line];
+    }
+
+    return trimmedLine
+        .replace(/\s+(\d+\.\s+)/g, "\n$1")
+        .split("\n")
+        .map(function (listItem) {
+            return `${leadingWhitespace}${listItem}`;
+        });
+}
+
+function expandInlineOrderedListLines(lines) {
+    const expandedLines = [];
+    let isInsideCodeBlock = false;
+
+    lines.forEach(function (line) {
+        if (line.trim().startsWith("```")) {
+            expandedLines.push(line);
+            isInsideCodeBlock = !isInsideCodeBlock;
+            return;
+        }
+
+        if (isInsideCodeBlock) {
+            expandedLines.push(line);
+            return;
+        }
+
+        splitInlineOrderedListItems(line).forEach(function (listItem) {
+            expandedLines.push(listItem);
+        });
+    });
+
+    return expandedLines;
+}
+
 function renderMarkdownList(lines, startIndex, ordered) {
     const items = [];
     const listItemPattern = ordered ? /^\d+\.\s+(.*)$/ : /^[-*]\s+(.*)$/;
@@ -93,7 +133,9 @@ function renderMarkdownList(lines, startIndex, ordered) {
 }
 
 function renderMarkdown(markdown) {
-    const lines = String(markdown ?? "").replaceAll("\r\n", "\n").replaceAll("\r", "\n").split("\n");
+    const lines = expandInlineOrderedListLines(
+        String(markdown ?? "").replaceAll("\r\n", "\n").replaceAll("\r", "\n").split("\n")
+    );
     const blocks = [];
     let index = 0;
 
