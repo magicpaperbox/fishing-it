@@ -66,7 +66,7 @@
 </main>
 
 <script>
-    const flashcards = {{ flashcards | tojson }};
+    const allFlashcards = {{ flashcards | tojson }};
     const deckId = {{ deck_id | tojson }};
 </script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>

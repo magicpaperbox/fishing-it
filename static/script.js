@@ -22,10 +22,10 @@ const studyProgressElement = document.querySelector("#study-progress");
 
 const summaryChartElement = document.querySelector("#summary-chart");
 
-let masteredCards = flashcards.filter(card => card.status === "mastered").length;
-let needsPracticeCards = flashcards.filter(card => card.status === "needs_practice").length;
-let notStartedCards = flashcards.filter(card => card.status === "not_started").length
-let currentFlashcards = flashcards;
+let masteredCards = allFlashcards.filter(card => card.status === "mastered").length;
+let needsPracticeCards = allFlashcards.filter(card => card.status === "needs_practice").length;
+let notStartedCards = allFlashcards.filter(card => card.status === "not_started").length;
+let currentFlashcards = allFlashcards;
 
 function escapeHtml(value) {
     return String(value ?? "")
@@ -349,8 +349,8 @@ function answerCard(status) {
 
 }
 
-function shuffleCards(cards){
-    const shuffledCards = [...cards];
+function shuffleCards(flashcards) {
+    const shuffledCards = [...flashcards];
     for (let i = shuffledCards.length - 1; i > 0; i--) {
         const randomIndex = Math.floor(Math.random() * (i + 1));
         const temporaryCard = shuffledCards[i];
@@ -360,15 +360,17 @@ function shuffleCards(cards){
     return shuffledCards;
 }
 
+function pickCards(flashcards, mode) {
+    if (mode === "not_mastered") {
+        return flashcards.filter(card => card.status !== "mastered");
+    } else {
+        return flashcards;
+    }
+}
+
 function startStudy(mode) {
     currentIndex = 0;
-
-    if (mode === "not_mastered") {
-        currentFlashcards = flashcards.filter(card => card.status !== "mastered");
-    } else {
-        currentFlashcards = flashcards;
-    }
-
+    currentFlashcards = pickCards(allFlashcards, mode);
     currentFlashcards = shuffleCards(currentFlashcards);
 
     if (currentFlashcards.length === 0) {
@@ -389,13 +391,13 @@ function startStudy(mode) {
 
 function startStudyFromScratch() {
     resetDeckProgress(deckId).then(function () {
-        flashcards.forEach(function (card) {
+        allFlashcards.forEach(function (card) {
             card.status = "not_started";
         });
 
         masteredCards = 0;
         needsPracticeCards = 0;
-        notStartedCards = flashcards.length;
+        notStartedCards = allFlashcards.length;
 
         startStudy();
     });

@@ -919,23 +919,21 @@ button:disabled {
     }
 
     .study-header {
-        margin-bottom: 0;
+        margin-bottom: 24px;
         justify-content: center;
     }
 
     .study-page .logo {
         align-self: center;
         width: clamp(142px, 42vw, 180px);
-        height: clamp(92px, 27vw, 116px);
         margin-bottom: 0;
-        overflow: hidden;
         align-items: flex-start;
     }
 
     .study-page .logo-image {
         width: 100%;
         max-width: none;
-        margin-top: -10%;
+        margin-top: 0;
         border-radius: 0;
     }
 
