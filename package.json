@@ -8,7 +8,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --noEmit && vite build",
+    "start": "npm run build && uv run python src/app.py"
   },
   "repository": {
     "type": "git",

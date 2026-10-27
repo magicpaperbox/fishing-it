@@ -1,3 +1,15 @@
+FROM node:24-bookworm-slim AS frontend-build
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY frontend ./frontend
+COPY vite.config.mjs tsconfig.json ./
+RUN npm run build
+
+
 FROM python:3.13-slim
 
 COPY --from=ghcr.io/astral-sh/uv:0.11.7 /uv /uvx /bin/
@@ -17,6 +29,7 @@ RUN uv sync --frozen --no-dev
 COPY src ./src
 COPY templates ./templates
 COPY static ./static
+COPY --from=frontend-build /app/static/dist ./static/dist
 
 EXPOSE 8000
 

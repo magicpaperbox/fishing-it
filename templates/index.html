@@ -37,8 +37,6 @@
 <script id="decks-data" type="application/json">
     {{ decks_json | tojson }}
 </script>
-<script type="module" src="http://localhost:5173/@vite/client"></script>
-
-<script type="module" src="http://localhost:5173/frontend/main.tsx"></script>
+<script type="module" src="{{ url_for('static', filename='dist/main.js') }}"></script>
 </body>
 </html>

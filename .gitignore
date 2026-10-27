@@ -4,3 +4,4 @@ flashcards.sqlite
 __pycache__/
 *.py[cod]
 node_modules/
+static/dist/

@@ -52,13 +52,14 @@ The interface is currently in Polish. Cards can contain questions and answers in
 
 ## Local setup
 
-Requirements: **Python 3.13+**, **Git**, and **[uv](https://docs.astral.sh/uv/getting-started/installation/)**.
+Requirements: **Python 3.13+**, **Node.js 24 (with npm)**, **Git**, and **[uv](https://docs.astral.sh/uv/getting-started/installation/)**.
 
 ```bash
 git clone https://github.com/magicpaperbox/fishing-it.git
 cd fishing-it
 uv sync --frozen
-uv run python src/app.py
+npm ci
+npm start
 ```
 
 The development server is available at **http://127.0.0.1:5000**. It runs locally and does not require access to the project's deployment server. The app creates its own `flashcards.sqlite` database on startup; the initial library is empty.
