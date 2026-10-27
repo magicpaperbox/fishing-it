@@ -14,9 +14,15 @@ def get_flashcards_repo():
 def index():
     repo = get_flashcards_repo()
     decks = repo.get_all_decks()
+    decks_json = [deck_to_json(deck) for deck in decks]
 
-    return render_template("index.html", decks=decks)
+    return render_template("index.html", decks=decks, decks_json=decks_json)
 
+def deck_to_json(deck):
+    return {
+        "id": deck.id,
+        "name": deck.name,
+    }
 
 def flashcard_to_json(flashcard):
     return {

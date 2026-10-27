@@ -752,6 +752,110 @@ button:disabled {
     line-height: 1.2;
 }
 
+.deck-search {
+    min-width: 0;
+    text-align: left;
+}
+
+.deck-search-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #7a2452;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.deck-search-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.deck-search-icon {
+    position: absolute;
+    left: 16px;
+    width: 21px;
+    height: 21px;
+    color: #a83b72;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    pointer-events: none;
+}
+
+.deck-search-input {
+    width: 100%;
+    min-width: 0;
+    min-height: 52px;
+    padding: 13px 16px 13px 48px;
+    border: 1px solid #e8adca;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #5f2644;
+    font: inherit;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(167, 25, 97, 0.04);
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.deck-search-input::placeholder {
+    color: #90667c;
+    opacity: 1;
+}
+
+.deck-search-input:hover {
+    border-color: #c74886;
+}
+
+.deck-search-input:focus-visible {
+    outline: 3px solid #7bdff2;
+    outline-offset: 3px;
+    border-color: #c74886;
+    box-shadow: 0 4px 16px rgba(167, 25, 97, 0.1);
+}
+
+.deck-search-results {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 18px;
+    color: #80516a;
+    font-size: 13px;
+}
+
+.deck-search-results strong {
+    min-width: 28px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: #fbe3ef;
+    color: #7a2452;
+    text-align: center;
+}
+
+.deck-search-empty {
+    padding: clamp(22px, 5vw, 36px) 18px;
+    border: 1px dashed #e8adca;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.deck-search-empty p {
+    margin: 0;
+    color: #80516a;
+    font-size: 14px;
+}
+
+.deck-search-empty .deck-search-empty-title {
+    margin-bottom: 6px;
+    color: #7a2452;
+    font-size: 18px;
+    font-weight: 700;
+}
+
 .home-page .deck-list {
     display: grid;
     gap: 10px;

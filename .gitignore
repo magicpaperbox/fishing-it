@@ -3,3 +3,4 @@ flashcards.sqlite
 .idea
 __pycache__/
 *.py[cod]
+node_modules/
