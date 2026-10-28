@@ -49,9 +49,12 @@ def show_deck(deck_id):
 @main_api.route('/import_flashcards', methods=['POST'])
 def import_flashcards():
     data = request.get_json()
+
+    validation_error = validate_flashcard(data)
+    if validation_error is not None:
+        return validation_error
+
     flashcards = data["flashcards"]
-    if not isinstance(flashcards, list):
-        raise TypeError('flashcards must be a list')
     name = data["name"].strip()
 
     repo = get_flashcards_repo()
@@ -125,3 +128,31 @@ def delete_deck(deck_id: int):
     repo = get_flashcards_repo()
     repo.delete_deck(deck_id)
     return redirect(url_for("main.index"))
+
+def validate_flashcard(data):
+    if not isinstance(data, dict) or "flashcards" not in data:
+        return {"error": "Missing flashcards field."}, 400
+    if "name" not in data:
+        return {"error": "Missing name field."}, 400
+    if not isinstance(data["name"], str):
+        return {"error": "Incorrect name type."}, 400
+    try:
+        normalize_deck_name(data["name"])
+    except ValueError as e:
+        return {"error": str(e)}, 400
+
+    flashcards = data["flashcards"]
+
+    if not isinstance(flashcards, list):
+        return {"error": "flashcards must be a list"}, 400
+
+    for flashcard_data in flashcards:
+        if not isinstance(flashcard_data, dict):
+            return {"error": "flashcards must be a dictionary"}, 400
+        if "category" not in flashcard_data:
+            return {"error": "Missing flashcard category."}, 400
+        if "question" not in flashcard_data:
+            return {"error": "Missing flashcard question."}, 400
+        if "answer" not in flashcard_data:
+            return {"error": "Missing flashcard answer."}, 400
+    return None
