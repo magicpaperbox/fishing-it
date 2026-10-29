@@ -15,7 +15,7 @@
 
 ## About
 
-FishingIT is a personal learning project built with Python, Flask, SQLite, and vanilla JavaScript. It brings flashcard decks, self-assessment, and saved study progress together in a simple browser interface.
+FishingIT is a personal learning project built with Python, Flask, SQLite, React, and vanilla JavaScript. It brings flashcard decks, self-assessment, and saved study progress together in a simple browser interface.
 
 The interface is currently in Polish. Cards can contain questions and answers in any language, including programming examples formatted with Markdown.
 
